@@ -15,6 +15,7 @@ include("source/autoload.php");
 $f = new Pleets\SysGebra\Math\Algebra\Factorial();
 $sum = new Pleets\SysGebra\Math\Algebra\Summation();
 $binomial = new Pleets\SysGebra\Math\Combinatorics\Binomial();
+$irr = new Pleets\SysGebra\Math\Applied\Finance\IRR();
 
 echo "Factorial of 5: ";
 echo $f->compute(5);
@@ -32,4 +33,8 @@ echo "<br />";
 
 echo "Binomial theorem (16 + 3)^4 = ";
 echo $binomial->compute(16, 3, 4);
+echo "<br />";
+
+echo "TIR of (-100, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20) = ";
+echo $irr->compute(array(20, 20, 20, 20, 20, 20, 20, 20, 20, 20), 100) * 100 . "%";
 echo "<br /><br />";
