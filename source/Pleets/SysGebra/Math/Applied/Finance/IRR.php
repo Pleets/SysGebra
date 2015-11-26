@@ -25,7 +25,7 @@ class IRR
 
 		$low = 0;
 		$high = 1;
-		$tir = ($low + $high) / 2.0;
+		$irr = ($low + $high) / 2.0;
 
 		$sum = new Summation();
 		$binomial = new Binomial();
@@ -33,10 +33,10 @@ class IRR
 		$n = count($F);
 
 		while (abs(
-			$sum->compute(1, $n, function($i) use ($F, $n, $binomial, $tir)
+			$sum->compute(1, $n, function($i) use ($F, $n, $binomial, $irr)
 			{
 				$numerator = $F[$i - 1];
-				$denominator = $binomial->compute(1, $tir, $i);
+				$denominator = $binomial->compute(1, $irr, $i);
 
 				return $numerator / $denominator;
 			}) - $I - $x
@@ -44,22 +44,22 @@ class IRR
 		{
 			$numGuesses++;
 
-			$vpn = $sum->compute(1, $n, function($i) use ($F, $n, $binomial, $tir)
+			$npv = $sum->compute(1, $n, function($i) use ($F, $n, $binomial, $irr)
 			{
 				$numerator = $F[$i - 1];
-				$denominator = $binomial->compute(1, $tir, $i);
+				$denominator = $binomial->compute(1, $irr, $i);
 
 				return $numerator / $denominator;
 			}) - $I;
 
-			if ($vpn > $x)
-				$low = $tir;
+			if ($npv > $x)
+				$low = $irr;
 			else
-				$high = $tir;
+				$high = $irr;
 
-			$tir = ($low + $high) / 2.0;
+			$irr = ($low + $high) / 2.0;
 		}
 
-		return $tir;
+		return $irr;
 	}
 }

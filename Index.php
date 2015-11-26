@@ -35,6 +35,6 @@ echo "Binomial theorem (16 + 3)^4 = ";
 echo $binomial->compute(16, 3, 4);
 echo "<br />";
 
-echo "TIR of (-100, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20) = ";
+echo "IRR of (-100, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20) = ";
 echo $irr->compute(array(20, 20, 20, 20, 20, 20, 20, 20, 20, 20), 100) * 100 . "%";
 echo "<br /><br />";
