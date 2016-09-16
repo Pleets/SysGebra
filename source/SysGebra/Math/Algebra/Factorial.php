@@ -1,16 +1,13 @@
 <?php
-
-/*
- * SysGebra - Computer algebra system
- * http://www.pleets.org
- * Copyright 2015, Pleets Apps
- * Free to use under the MIT license.
- * http://www.opensource.org/licenses/mit-license.php
+/**
+ * SysGebra (http://www.sysgebra.com)
  *
- * Date: 2015-11-25
+ * @link      http://github.com/Pleets/SysGebra
+ * @copyright Copyright (c) 2016 SysGebra. (http://www.sysgebra.com)
+ * @license   http://www.sysgebra.com/license
  */
 
-namespace Pleets\SysGebra\Math\Algebra;
+namespace SysGebra\Math\Algebra;
 
 class Factorial
 {

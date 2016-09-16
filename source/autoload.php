@@ -4,7 +4,7 @@
  *	App Autoloader
  */
 
-function Pleets_SysGebra_Loader($name)
+function SysGebra_Loader($name)
 {
 
 	$class = __DIR__ . "/". str_replace('\\', '/', $name) . ".php";
@@ -13,4 +13,4 @@ function Pleets_SysGebra_Loader($name)
 		include $class;
 }
 
-spl_autoload_register("Pleets_SysGebra_Loader");
+spl_autoload_register("SysGebra_Loader");
