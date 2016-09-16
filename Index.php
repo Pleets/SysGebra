@@ -12,10 +12,10 @@
 
 include("source/autoload.php");
 
-$f = new Pleets\SysGebra\Math\Algebra\Factorial();
-$sum = new Pleets\SysGebra\Math\Algebra\Summation();
-$binomial = new Pleets\SysGebra\Math\Combinatorics\Binomial();
-$irr = new Pleets\SysGebra\Math\Applied\Finance\IRR();
+$f = new SysGebra\Math\Algebra\Factorial();
+$sum = new SysGebra\Math\Algebra\Summation();
+$binomial = new SysGebra\Math\Combinatorics\Binomial();
+$irr = new SysGebra\Math\Applied\Finance\IRR();
 
 echo "Factorial of 5: ";
 echo $f->compute(5);
