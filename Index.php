@@ -10,6 +10,9 @@
  * Date: 2015-11-25
  */
 
+ini_set('display_errors', 1);
+error_reporting(-1);
+
 include("source/autoload.php");
 
 $f = new SysGebra\Math\Algebra\Factorial();
@@ -38,3 +41,8 @@ echo "<br />";
 echo "IRR of (-100, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20) = ";
 echo $irr->compute(array(20, 20, 20, 20, 20, 20, 20, 20, 20, 20), 100) * 100 . "%";
 echo "<br /><br />";
+
+echo "NewtonRaphson (x^2) = ";
+
+$newton = new SysGebra\Math\Analysis\Numerical\NewtonRaphson(["initialValue" => 0.5, "epsilon" => 0.001, "maxIterations" => 20]);
+echo $newton->compute("2*x^2-1", "4*x");
