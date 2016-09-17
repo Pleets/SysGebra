@@ -10,6 +10,7 @@
 namespace SysGebra\Math\Analysis\Numerical;
 
 use Exception;
+use SysGebra\Util\Calculator;
 
 class NewtonRaphson
 {
@@ -152,7 +153,7 @@ class NewtonRaphson
 	}
 
 	/**
-	 * Polynomial function computation
+	 * Computes the function
 	 *
 	 * @param string $f
 	 * @param double $x
@@ -161,90 +162,6 @@ class NewtonRaphson
 	 */
 	private function f($f, $x)
 	{
-		return $this->computeExpression(str_replace("x", $x, $f));
-	}
-
-	/**
-	 * Numeric computation
-	 *
-	 * @param string $expression
-	 *
-	 * @return float
-	 */
-	public function computeExpression($expression)
-	{
-		$sum = explode("+", $expression);
-		$sub = explode("-", $expression);
-		$pow = explode("^", $expression);
-		$tim = explode("*", $expression);
-		$div = explode("/", $expression);
-
-		if (count($sum) < 2 && count($sub) < 2 && count($pow) < 2 && count($tim) < 2 && count($div) < 2)
-			return $expression;
-
-		if (count($sum) > 1)
-		{
-			$r = 0;
-
-			foreach ($sum as $value)
-			{
-				$r += $this->computeExpression($value);
-			}
-
-			return $r;
-		}
-
-		if (count($sub) > 1)
-		{
-			$r = 0;
-
-			$k = 0;
-			foreach ($sub as $value)
-			{
-				if ($k != 0)
-					$r -= $this->computeExpression($value);
-				else
-					$r += $this->computeExpression($value);
-				$k++;
-			}
-
-			return $r;
-		}
-
-		if (count($tim) > 1)
-		{
-			$r = 1;
-
-			foreach ($tim as $value)
-			{
-				$r *= $this->computeExpression($value);
-			}
-
-			return $r;
-		}
-
-		if (count($div) > 1)
-		{
-			$r = null;
-
-			foreach ($div as $value)
-			{
-				$r = (is_null($r)) ? $this->computeExpression($value) : $r / $this->computeExpression($value);
-			}
-
-			return $r;
-		}
-
-		if (count($pow) > 1)
-		{
-			$collector = [];
-
-			for ($i = 0; $i < $pow[1]; $i++)
-			{
-				$collector[] = $pow[0];
-			}
-
-			return $this->computeExpression(implode("*", $collector));
-		}
+		return Calculator::compute(str_replace("x", $x, $f));
 	}
 }
