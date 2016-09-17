@@ -121,8 +121,8 @@ class NewtonRaphson
 
 		foreach ($options as $option => $value)
 		{
-	    	if (property_exists(__CLASS__, $option) && method_exists($this, 'set'.ucfirst($option)))
-	    	    $this->{'set'.ucfirst($option)}($value);
+			if (property_exists(__CLASS__, $option) && method_exists($this, 'set'.ucfirst($option)))
+				$this->{'set'.ucfirst($option)}($value);
 		}
 	}
 
