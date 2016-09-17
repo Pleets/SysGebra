@@ -177,8 +177,9 @@ class NewtonRaphson
 		$sub = explode("-", $expression);
 		$pow = explode("^", $expression);
 		$tim = explode("*", $expression);
+		$div = explode("/", $expression);
 
-		if (count($sum) < 2 && count($sub) < 2 && count($pow) < 2 && count($tim) < 2)
+		if (count($sum) < 2 && count($sub) < 2 && count($pow) < 2 && count($tim) < 2 && count($div) < 2)
 			return $expression;
 
 		if (count($sum) > 1)
@@ -217,6 +218,18 @@ class NewtonRaphson
 			foreach ($tim as $value)
 			{
 				$r *= $this->computeExpression($value);
+			}
+
+			return $r;
+		}
+
+		if (count($div) > 1)
+		{
+			$r = null;
+
+			foreach ($div as $value)
+			{
+				$r = (is_null($r)) ? $this->computeExpression($value) : $r / $this->computeExpression($value);
 			}
 
 			return $r;
