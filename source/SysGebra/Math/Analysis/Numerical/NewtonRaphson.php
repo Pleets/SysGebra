@@ -119,11 +119,11 @@ class NewtonRaphson
 		if (!is_array($options))
 			throw new Exception("Invalid input type given. Array expected!");
 
-        foreach ($options as $option => $value)
-        {
-            if (property_exists(__CLASS__, $option) && method_exists($this, 'set'.ucfirst($option)))
-                $this->{'set'.ucfirst($option)}($value);
-        }
+		foreach ($options as $option => $value)
+		{
+	    	if (property_exists(__CLASS__, $option) && method_exists($this, 'set'.ucfirst($option)))
+	    	    $this->{'set'.ucfirst($option)}($value);
+		}
 	}
 
 	/**
