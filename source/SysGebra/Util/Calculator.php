@@ -127,14 +127,14 @@ class Calculator
 
 		if (count($pow) > 1)
 		{
-			$collector = [];
+			$r = null;
 
-			for ($i = 0; $i < $pow[1]; $i++)
+			foreach ($pow as $value)
 			{
-				$collector[] = $pow[0];
+				$r = (is_null($r)) ? self::compute($value) : pow($r, self::compute($value));
 			}
 
-			return self::compute(implode("*", $collector));
+			return $r;
 		}
 
 		return $expression;
