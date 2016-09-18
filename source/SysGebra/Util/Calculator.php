@@ -100,7 +100,6 @@ class Calculator
 			return self::compute(str_replace($match, $ans, $expression));
 		}
 
-
 		$sum = explode("+", $expression);
 		$sub = explode("-", $expression);
 		$pow = explode("^", $expression);
@@ -157,8 +156,7 @@ class Calculator
 
 		if (count($brackets) > 1)
 		{
-
-			$bracket_start = strpos($expression, "(");
+			$bracket_start = strrpos($expression, "(");
 			$exp_without_left_part = substr($expression, $bracket_start);
 
 			$bracket_end = strpos($exp_without_left_part, ")");
