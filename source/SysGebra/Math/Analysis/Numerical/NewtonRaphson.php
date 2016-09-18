@@ -79,7 +79,7 @@ class NewtonRaphson
 	 *
 	 * @param float $initialValue
 	 *
-	 * @return float
+	 * @return null
 	 */
 	public function setInitialValue($initialValue)
 	{
@@ -87,11 +87,11 @@ class NewtonRaphson
 	}
 
 	/**
-	 * Sets the initial value
+	 * Sets epsilon
 	 *
 	 * @param float $epsilon
 	 *
-	 * @return float
+	 * @return null
 	 */
 	public function setEpsilon($epsilon)
 	{
@@ -103,7 +103,7 @@ class NewtonRaphson
 	 *
 	 * @param integer $maxIterations
 	 *
-	 * @return float
+	 * @return null
 	 */
 	public function setMaxIterations($maxIterations)
 	{
