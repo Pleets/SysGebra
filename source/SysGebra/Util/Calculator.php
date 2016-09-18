@@ -26,8 +26,51 @@ class Calculator
 		$tim = explode("*", $expression);
 		$div = explode("/", $expression);
 
-		if (count($sum) < 2 && count($sub) < 2 && count($pow) < 2 && count($tim) < 2 && count($div) < 2)
-			return $expression;
+		$sin = explode("sin(", $expression);
+		$cos = explode("cos(", $expression);
+		$tan = explode("tan(", $expression);
+
+		if (count($sin) > 1)
+		{
+			$sin_start = strpos($expression, "sin(");
+			$sin_without_left_part = substr($expression, $sin_start);
+
+			$sin_end = strpos($sin_without_left_part, ")");
+			$sin_declaration = substr($sin_without_left_part, 0, $sin_end + 1);
+
+			$sin_args = substr($sin_declaration, 4, strpos($sin_declaration, ")") - 4);
+			$sin_solved_expression = substr($expression, 0, $sin_start) . sin(self::compute($sin_args)) . substr($sin_without_left_part, $sin_end + 1 );
+
+			return self::compute($sin_solved_expression);
+		}
+
+		if (count($cos) > 1)
+		{
+			$sin_start = strpos($expression, "cos(");
+			$sin_without_left_part = substr($expression, $sin_start);
+
+			$sin_end = strpos($sin_without_left_part, ")");
+			$sin_declaration = substr($sin_without_left_part, 0, $sin_end + 1);
+
+			$sin_args = substr($sin_declaration, 4, strpos($sin_declaration, ")") - 4);
+			$sin_solved_expression = substr($expression, 0, $sin_start) . cos(self::compute($sin_args)) . substr($sin_without_left_part, $sin_end + 1 );
+
+			return self::compute($sin_solved_expression);
+		}
+
+		if (count($tan) > 1)
+		{
+			$sin_start = strpos($expression, "tan(");
+			$sin_without_left_part = substr($expression, $sin_start);
+
+			$sin_end = strpos($sin_without_left_part, ")");
+			$sin_declaration = substr($sin_without_left_part, 0, $sin_end + 1);
+
+			$sin_args = substr($sin_declaration, 4, strpos($sin_declaration, ")") - 4);
+			$sin_solved_expression = substr($expression, 0, $sin_start) . tan(self::compute($sin_args)) . substr($sin_without_left_part, $sin_end + 1 );
+
+			return self::compute($sin_solved_expression);
+		}
 
 		if (count($sum) > 1)
 		{
@@ -93,5 +136,7 @@ class Calculator
 
 			return self::compute(implode("*", $collector));
 		}
+
+		return $expression;
 	}
 }
