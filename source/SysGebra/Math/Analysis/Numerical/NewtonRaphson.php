@@ -162,6 +162,6 @@ class NewtonRaphson
 	 */
 	private function f($f, $x)
 	{
-		return Calculator::compute(str_replace("x", $x, $f));
+		return Calculator::compute(str_replace("x", "(".$x.")", $f));
 	}
 }
