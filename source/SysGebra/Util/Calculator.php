@@ -30,6 +30,8 @@ class Calculator
 		$cos = explode("cos(", $expression);
 		$tan = explode("tan(", $expression);
 
+		$brackets = explode("(", $expression);
+
 		if (count($sin) > 1)
 		{
 			$sin_start = strpos($expression, "sin(");
@@ -70,6 +72,21 @@ class Calculator
 			$sin_solved_expression = substr($expression, 0, $sin_start) . tan(self::compute($sin_args)) . substr($sin_without_left_part, $sin_end + 1 );
 
 			return self::compute($sin_solved_expression);
+		}
+
+		if (count($brackets) > 1)
+		{
+
+			$bracket_start = strpos($expression, "(");
+			$exp_without_left_part = substr($expression, $bracket_start);
+
+			$bracket_end = strpos($exp_without_left_part, ")");
+			$bracket_declaration = substr($exp_without_left_part, 0, $bracket_end + 1);
+
+			$bracket_args = substr($bracket_declaration, 1, strpos($bracket_declaration, ")") - 1);
+			$bracket_solved_expression = substr($expression, 0, $bracket_start) . self::compute($bracket_args) . substr($exp_without_left_part, $bracket_end + 1 );
+
+			return self::compute($bracket_solved_expression);
 		}
 
 		if (count($sum) > 1)
