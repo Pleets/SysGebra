@@ -20,6 +20,87 @@ class Calculator
 	 */
 	public static function compute($expression)
 	{
+		# 1^2, 2^-3
+		$powRegEx = '/([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\^]([\+\-]?[√]?[0-9]+([.][0-9]+)?)/';
+
+		# (-1)^2, (-3)^-4
+		$powRegEx2 = '/[\(][\+\-]?([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\)][\^]([\-]?[√]?[0-9]+([.][0-9]+)?)/';
+
+		# (1)^(2), (-3)^(-4)
+		$powRegEx3 = '/[\(][\+\-]?([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\)][\^][\(]([\-]?[√]?[0-9]+([.][0-9]+)?)[\)]/';
+
+		if (preg_match($powRegEx, $expression, $matches) === 1)
+		{
+			$match = array_shift($matches);
+			$pow = explode("^", $match);
+
+			$ans = pow($pow[0], $pow[1]);
+
+			return self::compute(str_replace($match, $ans, $expression));
+		}
+
+		if (preg_match($powRegEx2, $expression, $matches) === 1)
+		{
+			$match = array_shift($matches);
+
+			$pow = explode("^", $match);
+
+			$ans = pow(substr($pow[0], 1, strlen($pow[0] - 2)), $pow[1]);
+
+			return self::compute(str_replace($match, $ans, $expression));
+		}
+
+		if (preg_match($powRegEx3, $expression, $matches) === 1)
+		{
+			$match = array_shift($matches);
+			$pow = explode("^", $match);
+
+			$ans = pow(substr($pow[0], 1, strlen($pow[0] - 2)), substr($pow[1], 1, strlen($pow[1] - 2)));
+
+			return self::compute(str_replace($match, $ans, $expression));
+		}
+
+		# 1*3, 3*-3
+		$prodRegEx = '/([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\*]([\+\-]?[√]?[0-9]+([.][0-9]+)?)/';
+
+		# (-1)*2, (-3)*-4
+		$prodRegEx2 = '/[\(][\+\-]?([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\)][\*]([\-]?[√]?[0-9]+([.][0-9]+)?)/';
+
+		# (1)*(2), (-3)*(-4)
+		$prodRegEx3 = '/[\(][\+\-]?([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\)][\*][\(]([\-]?[√]?[0-9]+([.][0-9]+)?)[\)]/';
+
+		if (preg_match($prodRegEx, $expression, $matches) === 1)
+		{
+			$match = array_shift($matches);
+			$pow = explode("*", $match);
+
+			$ans = $pow[0] * $pow[1];
+
+			return self::compute(str_replace($match, $ans, $expression));
+		}
+
+		if (preg_match($prodRegEx2, $expression, $matches) === 1)
+		{
+			$match = array_shift($matches);
+
+			$pow = explode("*", $match);
+
+			$ans = substr($pow[0], 1, strlen($pow[0] - 2)) * $pow[1];
+
+			return self::compute(str_replace($match, $ans, $expression));
+		}
+
+		if (preg_match($prodRegEx3, $expression, $matches) === 1)
+		{
+			$match = array_shift($matches);
+			$pow = explode("*", $match);
+
+			$ans = substr($pow[0], 1, strlen($pow[0] - 2)) * substr($pow[1], 1, strlen($pow[1] - 2));
+
+			return self::compute(str_replace($match, $ans, $expression));
+		}
+
+
 		$sum = explode("+", $expression);
 		$sub = explode("-", $expression);
 		$pow = explode("^", $expression);
