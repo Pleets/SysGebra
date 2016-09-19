@@ -11,6 +11,8 @@ namespace SysGebra\Util;
 
 class Calculator
 {
+	private static $lastIterations = 0;
+
 	/**
 	 * Computes a basic expression
 	 *
@@ -20,6 +22,15 @@ class Calculator
 	 */
 	public static function compute($expression)
 	{
+		self::$lastIterations++;
+
+		$sign_op = '/[-]{2}/';
+
+		if (preg_match($sign_op, $expression, $matches) === 1)
+		{
+			return self::compute(str_replace("--", "+", $expression));
+		}
+
 		# 1^2, 2^-3
 		$powRegEx = '/([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\^]([\+\-]?[√]?[0-9]+([.][0-9]+)?)/';
 
@@ -156,17 +167,19 @@ class Calculator
 
 		if (count($brackets) > 1)
 		{
-			$bracket_start = strrpos($expression, "(");
-			$exp_without_left_part = substr($expression, $bracket_start);
+			$end_pos = strpos($expression, ")");
+			$sub = substr($expression, 0, $end_pos);
 
-			$bracket_end = strpos($exp_without_left_part, ")");
-			$bracket_declaration = substr($exp_without_left_part, 0, $bracket_end + 1);
+			$ini_pos = strrpos($sub, "(");
+			$args = substr($sub, $ini_pos + 1);
 
-			$bracket_args = substr($bracket_declaration, 1, strpos($bracket_declaration, ")") - 1);
-			$bracket_solved_expression = substr($expression, 0, $bracket_start) . self::compute($bracket_args) . substr($exp_without_left_part, $bracket_end + 1 );
+			$solved = substr($sub, 0, $ini_pos) . self::compute($args) . substr($expression, $end_pos + 1);
 
-			return self::compute($bracket_solved_expression);
+			return self::compute($solved);
 		}
+
+		#echo "Iterations: " . self::$lastIterations . "<br />";
+		#exit();
 
 		if (count($sum) > 1)
 		{
@@ -174,6 +187,9 @@ class Calculator
 
 			foreach ($sum as $value)
 			{
+				if (empty($value))
+					continue;
+
 				$r += self::compute($value);
 			}
 
@@ -187,11 +203,16 @@ class Calculator
 			$k = 0;
 			foreach ($sub as $value)
 			{
-				if ($k != 0)
+				$k++;
+
+				if (empty($value))
+					continue;
+
+
+				if ($k != 1)
 					$r -= self::compute($value);
 				else
 					$r += self::compute($value);
-				$k++;
 			}
 
 			return $r;
