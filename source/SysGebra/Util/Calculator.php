@@ -128,10 +128,10 @@ class Calculator
 			$sin_start = strpos($expression, "sin(");
 			$sin_without_left_part = substr($expression, $sin_start);
 
-			$sin_end = strpos($sin_without_left_part, ")");
+			$sin_end = strrpos($sin_without_left_part, ")");
 			$sin_declaration = substr($sin_without_left_part, 0, $sin_end + 1);
 
-			$sin_args = substr($sin_declaration, 4, strpos($sin_declaration, ")") - 4);
+			$sin_args = substr($sin_declaration, 4, strrpos($sin_declaration, ")") - 4);
 			$sin_solved_expression = substr($expression, 0, $sin_start) . sin(self::compute($sin_args)) . substr($sin_without_left_part, $sin_end + 1 );
 
 			return self::compute($sin_solved_expression);
@@ -142,10 +142,10 @@ class Calculator
 			$sin_start = strpos($expression, "cos(");
 			$sin_without_left_part = substr($expression, $sin_start);
 
-			$sin_end = strpos($sin_without_left_part, ")");
+			$sin_end = strrpos($sin_without_left_part, ")");
 			$sin_declaration = substr($sin_without_left_part, 0, $sin_end + 1);
 
-			$sin_args = substr($sin_declaration, 4, strpos($sin_declaration, ")") - 4);
+			$sin_args = substr($sin_declaration, 4, strrpos($sin_declaration, ")") - 4);
 			$sin_solved_expression = substr($expression, 0, $sin_start) . cos(self::compute($sin_args)) . substr($sin_without_left_part, $sin_end + 1 );
 
 			return self::compute($sin_solved_expression);
@@ -156,10 +156,10 @@ class Calculator
 			$sin_start = strpos($expression, "tan(");
 			$sin_without_left_part = substr($expression, $sin_start);
 
-			$sin_end = strpos($sin_without_left_part, ")");
+			$sin_end = strrpos($sin_without_left_part, ")");
 			$sin_declaration = substr($sin_without_left_part, 0, $sin_end + 1);
 
-			$sin_args = substr($sin_declaration, 4, strpos($sin_declaration, ")") - 4);
+			$sin_args = substr($sin_declaration, 4, strrpos($sin_declaration, ")") - 4);
 			$sin_solved_expression = substr($expression, 0, $sin_start) . tan(self::compute($sin_args)) . substr($sin_without_left_part, $sin_end + 1 );
 
 			return self::compute($sin_solved_expression);
