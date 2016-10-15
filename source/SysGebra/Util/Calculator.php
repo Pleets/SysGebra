@@ -56,7 +56,7 @@ class Calculator
 
 			$pow = explode("^", $match);
 
-			$ans = pow(substr($pow[0], 1, strlen($pow[0] - 2)), $pow[1]);
+			$ans = pow(substr($pow[0], 1, strlen($pow[0]) - 2), $pow[1]);
 
 			return self::compute(str_replace($match, $ans, $expression));
 		}
@@ -66,7 +66,7 @@ class Calculator
 			$match = array_shift($matches);
 			$pow = explode("^", $match);
 
-			$ans = pow(substr($pow[0], 1, strlen($pow[0] - 2)), substr($pow[1], 1, strlen($pow[1] - 2)));
+			$ans = pow(substr($pow[0], 1, strlen($pow[0]) - 2), substr($pow[1], 1, strlen($pow[1] - 2)));
 
 			return self::compute(str_replace($match, $ans, $expression));
 		}
@@ -96,7 +96,7 @@ class Calculator
 
 			$pow = explode("*", $match);
 
-			$ans = substr($pow[0], 1, strlen($pow[0] - 2)) * $pow[1];
+			$ans = substr($pow[0], 1, strlen($pow[0]) - 2) * $pow[1];
 
 			return self::compute(str_replace($match, $ans, $expression));
 		}
@@ -106,7 +106,7 @@ class Calculator
 			$match = array_shift($matches);
 			$pow = explode("*", $match);
 
-			$ans = substr($pow[0], 1, strlen($pow[0] - 2)) * substr($pow[1], 1, strlen($pow[1] - 2));
+			$ans = substr($pow[0], 1, strlen($pow[0]) - 2) * substr($pow[1], 1, strlen($pow[1] - 2));
 
 			return self::compute(str_replace($match, $ans, $expression));
 		}
