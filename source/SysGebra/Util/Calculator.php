@@ -77,6 +77,9 @@ class Calculator
 		# (-1)*2, (-3)*-4
 		$prodRegEx2 = '/[\(][\+\-]?([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\)][\*]([\-]?[√]?[0-9]+([.][0-9]+)?)/';
 
+		# 2*(-1)
+		$prodRegEx21 = '/([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\*][\(]([\-]?[√]?[0-9]+([.][0-9]+)?)[\)]/';
+
 		# (1)*(2), (-3)*(-4)
 		$prodRegEx3 = '/[\(][\+\-]?([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\)][\*][\(]([\-]?[√]?[0-9]+([.][0-9]+)?)[\)]/';
 
@@ -97,6 +100,17 @@ class Calculator
 			$pow = explode("*", $match);
 
 			$ans = substr($pow[0], 1, strlen($pow[0]) - 2) * $pow[1];
+
+			return self::compute(str_replace($match, $ans, $expression));
+		}
+
+		if (preg_match($prodRegEx21, $expression, $matches) === 1)
+		{
+			$match = array_shift($matches);
+
+			$pow = explode("*", $match);
+
+			$ans = $pow[0] * substr($pow[1], 1, strlen($pow[1]) - 2);
 
 			return self::compute(str_replace($match, $ans, $expression));
 		}
