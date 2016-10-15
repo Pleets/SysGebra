@@ -178,9 +178,6 @@ class Calculator
 			return self::compute($solved);
 		}
 
-		#echo "Iterations: " . self::$lastIterations . "<br />";
-		#exit();
-
 		if (count($sum) > 1)
 		{
 			$r = 0;
