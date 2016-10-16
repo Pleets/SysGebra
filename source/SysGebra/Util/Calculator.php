@@ -57,9 +57,6 @@ class Calculator
 
 			foreach (array_shift($args) as $arg)
 			{
-				if (empty($arg))
-					continue;
-
 				$r = (is_null($r)) ? $arg : pow($r, $arg);
 			}
 
@@ -85,9 +82,6 @@ class Calculator
 
 			foreach (array_shift($args) as $arg)
 			{
-				if (empty($arg))
-					continue;
-
 				$r *= $arg;
 			}
 
