@@ -31,98 +31,105 @@ class Calculator
 			return self::compute(str_replace("--", "+", $expression));
 		}
 
-		# 1^2, 2^-3
-		$powRegEx = '/([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\^]([\+\-]?[√]?[0-9]+([.][0-9]+)?)/';
+		$LNUM = "[0-9]+";
+		$DNUM = "$LNUM([\.]$LNUM)?";
+		$ENUM = "$DNUM([eE][\+\-]?[0-9]+)?";
 
-		# (-1)^2, (-3)^-4
-		$powRegEx2 = '/[\(][\+\-]?([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\)][\^]([\-]?[√]?[0-9]+([.][0-9]+)?)/';
+		if (preg_match('/^'.$ENUM.'$/', $expression, $match))
+			return $expression;
 
-		# (1)^(2), (-3)^(-4)
-		$powRegEx3 = '/[\(][\+\-]?([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\)][\^][\(]([\-]?[√]?[0-9]+([.][0-9]+)?)[\)]/';
+		$POW1 = "$ENUM".'[\^]'."$ENUM";										# 1^3, 2^2.5, 2.5^2e2, 2e2^2e3
+		$POW2 = '[\(][\-]?'."$ENUM".'[\)][\^][\-]?'."$ENUM";				# (1)^-3, (-2)^2.5, (-2.5)^-2e2, (2e2)^2e3
+		$POW3 = "$ENUM".'[\^][\(][\-]?'."$ENUM".'[\)]';						# 1^(-3), 2^(2.5), 2.5^(-2e2), 2e2^(2e3)
+		$POW4 = '[\(][\-]?'."$ENUM".'[\)][\^][\(][\-]?'."$ENUM".'[\)]';		# (-1)^(-3), (-2)^(2.5), (-2.5)^(-2e2), (2e2)^(2e3)
 
-		if (preg_match($powRegEx, $expression, $matches) === 1)
-		{
-			$match = array_shift($matches);
-			$pow = explode("^", $match);
+		if (
+			preg_match('/'.$POW1.'/', $expression, $match) === 1 ||
+			preg_match('/'.$POW2.'/', $expression, $match) === 1 ||
+			preg_match('/'.$POW3.'/', $expression, $match) === 1 ||
+			preg_match('/'.$POW4.'/', $expression, $match) === 1
+		) {
+			$subexpression = array_shift($match);
 
-			$ans = pow($pow[0], $pow[1]);
+			preg_match_all('/[\-]?'.$ENUM.'/', $subexpression, $args);
 
-			return self::compute(str_replace($match, $ans, $expression));
+			$r = null;
+
+			foreach (array_shift($args) as $arg)
+			{
+				if (empty($arg))
+					continue;
+
+				$r = (is_null($r)) ? $arg : pow($r, $arg);
+			}
+
+			return self::compute(str_replace($subexpression, $r, $expression));
 		}
 
-		if (preg_match($powRegEx2, $expression, $matches) === 1)
-		{
-			$match = array_shift($matches);
+		$TIM1 = "$ENUM".'[\*]'."$ENUM";										# 1*3, 2*2.5, 2.5*2e2, 2e2*2e3
+		$TIM2 = '[\(][\-]?'."$ENUM".'[\)][\*][\-]?'."$ENUM";				# (1)*-3, (-2)*2.5, (-2.5)*-2e2, (2e2)*2e3
+		$TIM3 = "$ENUM".'[\*][\(][\-]?'."$ENUM".'[\)]';						# 1*(-3), 2*(2.5), 2.5*(-2e2), 2e2*(2e3)
+		$TIM4 = '[\(][\-]?'."$ENUM".'[\)][\*][\(][\-]?'."$ENUM".'[\)]';		# (-1)*(-3), (-2)*(2.5), (-2.5)*(-2e2), (2e2)*(2e3)
 
-			$pow = explode("^", $match);
+		if (
+			preg_match('/'.$TIM1.'/', $expression, $match) === 1 ||
+			preg_match('/'.$TIM2.'/', $expression, $match) === 1 ||
+			preg_match('/'.$TIM3.'/', $expression, $match) === 1 ||
+			preg_match('/'.$TIM4.'/', $expression, $match) === 1
+		) {
+			$subexpression = array_shift($match);
 
-			$ans = pow(substr($pow[0], 1, strlen($pow[0]) - 2), $pow[1]);
+			preg_match_all('/[\-]?'.$ENUM.'/', $subexpression, $args);
 
-			return self::compute(str_replace($match, $ans, $expression));
+			$r = 1;
+
+			foreach (array_shift($args) as $arg)
+			{
+				if (empty($arg))
+					continue;
+
+				$r *= $arg;
+			}
+
+			return self::compute(str_replace($subexpression, $r, $expression));
 		}
 
-		if (preg_match($powRegEx3, $expression, $matches) === 1)
-		{
-			$match = array_shift($matches);
-			$pow = explode("^", $match);
+		$SUM1 = '[\-]?'."$ENUM".'[\+]'."$ENUM";								# 1+3, -2+2.5, 2.5+2e2, 2e2+2e3
+		$SUM2 = '[\(][\-]?'."$ENUM".'[\)][\+]'."$ENUM";						# (1)+3, (-2)+2.5, (-2.5)+2e2, (2e2)+2e3
+		$SUM3 = '[\-]?'."$ENUM".'[\+][\(][\-]'."$ENUM".'[\)]';				# 1+(3), -2+(2.5), 2.5+(-2e2), 2e2+(2e3)
+		$SUM4 = '[\(][\-]?'."$ENUM".'[\)][\+][\(][\-]?'."$ENUM".'[\)]';		# (-1)+(-3), (-2)+(2.5), (-2.5)+(-2e2), (2e2)+(2e3)
+		$SUB1 = '[\-]?'."$ENUM".'[\-]'."$ENUM";								# 1-3, -2-2.5, 2.5-2e2, 2e2-2e3
+		$SUB2 = '[\(][\-]?'."$ENUM".'[\)][\-]'."$ENUM";						# (1)-3, (-2)-2.5, (-2.5)-2e2, (2e2)-2e3
+		$SUB3 = '[\-]?'."$ENUM".'[\-][\(][\-]'."$ENUM".'[\)]';				# 1-(3), -2-(2.5), 2.5-(-2e2), 2e2-(2e3)
+		$SUB4 = '[\(][\-]?'."$ENUM".'[\)][\-][\(][\-]?'."$ENUM".'[\)]';		# (-1)-(-3), (-2)-(2.5), (-2.5)-(-2e2), (2e2)-(2e3)
 
-			$ans = pow(substr($pow[0], 1, strlen($pow[0]) - 2), substr($pow[1], 1, strlen($pow[1] - 2)));
+		if (
+			preg_match('/'.$SUM1.'/', $expression, $match) === 1 ||
+			preg_match('/'.$SUM2.'/', $expression, $match) === 1 ||
+			preg_match('/'.$SUM3.'/', $expression, $match) === 1 ||
+			preg_match('/'.$SUM4.'/', $expression, $match) === 1 ||
+			preg_match('/'.$SUB1.'/', $expression, $match) === 1 ||
+			preg_match('/'.$SUB2.'/', $expression, $match) === 1 ||
+			preg_match('/'.$SUB3.'/', $expression, $match) === 1 ||
+			preg_match('/'.$SUB4.'/', $expression, $match) === 1
+		) {
+			$subexpression = array_shift($match);
 
-			return self::compute(str_replace($match, $ans, $expression));
-		}
+			preg_match_all('/[\-]?'.$ENUM.'/', $subexpression, $args);
 
-		# 1*3, 3*-3
-		$prodRegEx = '/([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\*]([\+\-]?[√]?[0-9]+([.][0-9]+)?)/';
+			$r = 0;
 
-		# (-1)*2, (-3)*-4
-		$prodRegEx2 = '/[\(][\+\-]?([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\)][\*]([\-]?[√]?[0-9]+([.][0-9]+)?)/';
+			foreach (array_shift($args) as $arg)
+			{
+				if (empty($arg))
+					continue;
 
-		# 2*(-1)
-		$prodRegEx21 = '/([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\*][\(]([\-]?[√]?[0-9]+([.][0-9]+)?)[\)]/';
+				$r += $arg;
+			}
 
-		# (1)*(2), (-3)*(-4)
-		$prodRegEx3 = '/[\(][\+\-]?([0-9]+([.][0-9]+)?)?[√]?[0-9]+([.][0-9]+)?[\)][\*][\(]([\-]?[√]?[0-9]+([.][0-9]+)?)[\)]/';
+			$r = ($r > 0) ? "+".$r : $r;
 
-		if (preg_match($prodRegEx, $expression, $matches) === 1)
-		{
-			$match = array_shift($matches);
-			$pow = explode("*", $match);
-
-			$ans = $pow[0] * $pow[1];
-
-			return self::compute(str_replace($match, $ans, $expression));
-		}
-
-		if (preg_match($prodRegEx2, $expression, $matches) === 1)
-		{
-			$match = array_shift($matches);
-
-			$pow = explode("*", $match);
-
-			$ans = substr($pow[0], 1, strlen($pow[0]) - 2) * $pow[1];
-
-			return self::compute(str_replace($match, $ans, $expression));
-		}
-
-		if (preg_match($prodRegEx21, $expression, $matches) === 1)
-		{
-			$match = array_shift($matches);
-
-			$pow = explode("*", $match);
-
-			$ans = $pow[0] * substr($pow[1], 1, strlen($pow[1]) - 2);
-
-			return self::compute(str_replace($match, $ans, $expression));
-		}
-
-		if (preg_match($prodRegEx3, $expression, $matches) === 1)
-		{
-			$match = array_shift($matches);
-			$pow = explode("*", $match);
-
-			$ans = substr($pow[0], 1, strlen($pow[0]) - 2) * substr($pow[1], 1, strlen($pow[1] - 2));
-
-			return self::compute(str_replace($match, $ans, $expression));
+			return self::compute(str_replace($subexpression, $r, $expression));
 		}
 
 		$sum = explode("+", $expression);
