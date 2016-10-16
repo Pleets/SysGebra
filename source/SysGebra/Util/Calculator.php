@@ -35,7 +35,7 @@ class Calculator
 		$DNUM = "$LNUM([\.]$LNUM)?";
 		$ENUM = "$DNUM([eE][\+\-]?[0-9]+)?";
 
-		if (preg_match('/^'.$ENUM.'$/', $expression, $match))
+		if (preg_match('/^[\-]?'.$ENUM.'$/', $expression, $match))
 			return $expression;
 
 		$POW1 = "$ENUM".'[\^]'."$ENUM";										# 1^3, 2^2.5, 2.5^2e2, 2e2^2e3
