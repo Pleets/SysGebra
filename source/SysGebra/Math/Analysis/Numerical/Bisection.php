@@ -143,21 +143,20 @@ class Bisection
 
 		# check opposites
 		if (
-			$this->f($f, $this->interval["a"]) > 0 &&  $this->f($f, $this->interval["b"]) > 0 ||
-			$this->f($f, $this->interval["a"]) < 0 &&  $this->f($f, $this->interval["b"]) < 0
+			($this->f($f, $this->interval["a"]) > 0 && $this->f($f, $this->interval["b"]) > 0) ||
+			($this->f($f, $this->interval["a"]) < 0 && $this->f($f, $this->interval["b"]) < 0)
 		)
 		throw new Exception("f(a) and f(b) have the same sign");
 
 		$sign_ref = ($this->f($f, $this->interval["a"]) > 0);
 
-		if ($this->f($f, $c) > 0 && $sign_ref)
-			$this->interval["a"] = $c;
-		else if ($this->f($f, $c) < 0 && $sign_ref)
-			$this->interval["b"] = $c;
-		else if ($this->f($f, $c) > 0 && $sign_ref)
-			$this->interval["b"] = $c;
+		if (
+			($this->f($f, $c) > 0 && $this->f($f, $this->interval["a"]) > 0) ||
+			($this->f($f, $c) < 0 && $this->f($f, $this->interval["a"]) < 0)
+		)
+		$this->interval["a"] = $c;
 		else
-			$this->interval["a"] = $c;
+			$this->interval["b"] = $c;
 
 		if ($this->numGuesses == $this->maxIterations)
 			return $c;
