@@ -50,9 +50,10 @@ class Calculator
 		$sign_op = '/[-]{2}/';
 
 		if (preg_match($sign_op, $expression, $matches) === 1)
-		{
 			return self::compute(str_replace("--", "+", $expression));
-		}
+
+		if (preg_match('/^[+]/', $expression, $matches) === 1)
+			return self::compute(str_replace("+", "", $expression));
 
 		$LNUM = "[0-9]+";
 		$DNUM = "$LNUM([\.]$LNUM)?";
