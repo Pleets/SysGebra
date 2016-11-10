@@ -35,6 +35,13 @@ class NewtonRaphson
 	private $maxIterations;
 
 	/**
+	 * Calculator to do computations
+	 *
+	 * @var Calculator
+	 */
+	private $calculator;
+
+	/**
 	 * Returns the initial value
 	 *
 	 * @return float
@@ -72,6 +79,16 @@ class NewtonRaphson
 	public function getMaxIterations()
 	{
 		return $this->maxIterations;
+	}
+
+	/**
+	 * Returns the Calculator
+	 *
+	 * @return Calculator
+	 */
+	public function getCalculator()
+	{
+		return $this->calculator;
 	}
 
 	/**
@@ -117,6 +134,9 @@ class NewtonRaphson
 	 */
 	public function __construct($options = array())
 	{
+		$this->calculator  = new Calculator;
+		$this->computation = [];
+
 		if (!is_array($options))
 			throw new Exception("Invalid input type given. Array expected!");
 
@@ -162,6 +182,6 @@ class NewtonRaphson
 	 */
 	private function f($f, $x)
 	{
-		return Calculator::compute(str_replace("x", "(".$x.")", $f));
+		return $this->calculator->compute(str_replace("x", "(".$x.")", $f));
 	}
 }

@@ -11,7 +11,32 @@ namespace SysGebra\Util;
 
 class Calculator
 {
-	private static $lastIterations = 0;
+	/**
+	 * Done computations
+	 *
+	 * @return array
+	 */
+	private $computation = [];
+
+	/**
+	 * Gets done computations
+	 *
+	 * @return array
+	 */
+	public function getComputation()
+	{
+		return $this->computation;
+	}
+
+	/**
+	 * Cleans computation buffer
+	 *
+	 * @return null
+	 */
+	public function cleanBuffer()
+	{
+		$this->computation = [];
+	}
 
 	/**
 	 * Computes a basic expression
@@ -22,8 +47,6 @@ class Calculator
 	 */
 	public static function compute($expression)
 	{
-		self::$lastIterations++;
-
 		$sign_op = '/[-]{2}/';
 
 		if (preg_match($sign_op, $expression, $matches) === 1)

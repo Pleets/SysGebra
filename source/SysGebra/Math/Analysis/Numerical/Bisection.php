@@ -35,6 +35,13 @@ class Bisection
 	private $maxIterations;
 
 	/**
+	 * Calculator to do computations
+	 *
+	 * @var Calculator
+	 */
+	private $calculator;
+
+	/**
 	 * Returns the interval
 	 *
 	 * @return array
@@ -72,6 +79,16 @@ class Bisection
 	public function getMaxIterations()
 	{
 		return $this->maxIterations;
+	}
+
+	/**
+	 * Returns the Calculator
+	 *
+	 * @return Calculator
+	 */
+	public function getCalculator()
+	{
+		return $this->calculator;
 	}
 
 	/**
@@ -117,6 +134,9 @@ class Bisection
 	 */
 	public function __construct($options = array())
 	{
+		$this->calculator  = new Calculator;
+		$this->computation = [];
+
 		if (!is_array($options))
 			throw new Exception("Invalid input type given. Array expected!");
 
@@ -174,6 +194,6 @@ class Bisection
 	 */
 	private function f($f, $x)
 	{
-		return Calculator::compute(str_replace("x", "(".$x.")", $f));
+		return $this->calculator->compute(str_replace("x", "(".$x.")", $f));
 	}
 }
