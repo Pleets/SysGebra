@@ -45,7 +45,7 @@ class Calculator
 	 *
 	 * @return float
 	 */
-	public static function compute($expression)
+	public function compute($expression)
 	{
 		$sign_op = '/[-]{2}/';
 
@@ -54,6 +54,8 @@ class Calculator
 
 		if (preg_match('/^[+]/', $expression, $matches) === 1)
 			return self::compute(str_replace("+", "", $expression));
+
+		$this->computation[] = $expression;
 
 		$LNUM = "[0-9]+";
 		$DNUM = "$LNUM([\.]$LNUM)?";
